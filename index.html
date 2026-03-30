@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intelligent Traffic Control Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="dashboard">
+    <header class="dashboard-header">
+      <h1>Intelligent Traffic Control</h1>
+      <p class="subtitle">State Machine • North–South / East–West</p>
+    </header>
+
+    <main class="dashboard-grid">
+      <!-- Visual Simulation: center area -->
+      <section class="simulation" aria-label="Traffic light visual simulation">
+        <div class="manual-controls" aria-label="Manual light override">
+          <h2 class="manual-title">Manual Override</h2>
+          <div class="control-group">
+            <span class="lane-label">N-S</span>
+            <div class="control-buttons">
+              <button type="button" class="color-btn color-btn-red" data-dir="ns" data-color="red" aria-label="Set N-S Red"></button>
+              <button type="button" class="color-btn color-btn-yellow" data-dir="ns" data-color="yellow" aria-label="Set N-S Yellow"></button>
+              <button type="button" class="color-btn color-btn-green" data-dir="ns" data-color="green" aria-label="Set N-S Green"></button>
+            </div>
+          </div>
+          <div class="control-group">
+            <span class="lane-label">E-W</span>
+            <div class="control-buttons">
+              <button type="button" class="color-btn color-btn-red" data-dir="ew" data-color="red" aria-label="Set E-W Red"></button>
+              <button type="button" class="color-btn color-btn-yellow" data-dir="ew" data-color="yellow" aria-label="Set E-W Yellow"></button>
+              <button type="button" class="color-btn color-btn-green" data-dir="ew" data-color="green" aria-label="Set E-W Green"></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="intersection-container">
+          <div class="lane ns-lane" aria-label="North-South lane">
+            <span class="lane-label">N-S</span>
+            <div class="traffic-pole">
+              <div class="light red" id="ns-red" aria-live="polite"></div>
+              <div class="light yellow" id="ns-yellow" aria-live="polite"></div>
+              <div class="light green on" id="ns-green" aria-live="polite"></div>
+            </div>
+          </div>
+          <div class="lane ew-lane" aria-label="East-West lane">
+            <span class="lane-label">E-W</span>
+            <div class="traffic-pole">
+              <div class="light red on" id="ew-red" aria-live="polite"></div>
+              <div class="light yellow" id="ew-yellow" aria-live="polite"></div>
+              <div class="light green" id="ew-green" aria-live="polite"></div>
+            </div>
+          </div>
+          <div class="lane ped-lane" aria-label="Pedestrian crossing">
+            <span class="lane-label">PED</span>
+            <div class="traffic-pole">
+              <div class="light red on" id="ped-red" aria-live="polite"></div>
+              <div class="light yellow" id="ped-yellow" aria-live="polite"></div>
+              <div class="light green" id="ped-green" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="transition-btn" id="transition-btn" aria-label="Switch active traffic direction">
+          Switch Direction
+        </button>
+        <button type="button" class="transition-btn pedestrian-btn" id="pedestrian-btn" aria-label="Request pedestrian crossing">
+          Pedestrian Request
+        </button>
+      </section>
+
+      <!-- System Logs: sidebar (moves to bottom on mobile) -->
+      <aside class="logs-sidebar" aria-label="System event log">
+        <h2>System Logs</h2>
+        <ul class="log-list" id="log-list" role="log"></ul>
+      </aside>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

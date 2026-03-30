@@ -1,0 +1,349 @@
+/* ============================================
+   Intelligent Traffic Control Dashboard
+   Mobile-First • Glassmorphism 2026
+   ============================================ */
+
+/* --- Base & variables (mobile-first) --- */
+:root {
+  --bg-dark: #0d1117;
+  --glass-bg: rgba(22, 27, 34, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --blur: 15px;
+  --radius: 16px;
+  --text: #e6edf3;
+  --text-muted: #8b949e;
+  --red: #f85149;
+  --yellow: #d29922;
+  --green: #3fb950;
+  --shadow-glow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text);
+  /* Dark blurred background for glassmorphism */
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(63, 185, 80, 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(210, 153, 34, 0.06), transparent);
+}
+
+/* --- Dashboard wrapper --- */
+.dashboard {
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+/* --- Grid: mobile = stacked (simulation on top, logs below) --- */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- Glass card base --- */
+.simulation,
+.logs-sidebar {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-glow);
+  padding: 1.25rem;
+}
+
+/* --- Visual Simulation (center content) --- */
+.simulation {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Blurred, 50% visible bg so traffic lights stand out */
+.simulation::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url('bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.5;
+  filter: blur(12px);
+  border-radius: inherit;
+}
+
+.simulation .intersection-container,
+.simulation .transition-btn,
+.simulation .pedestrian-btn {
+  position: relative;
+  z-index: 1;
+}
+
+/* Manual controls panel (left side on larger screens) */
+.manual-controls {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.manual-title {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.control-buttons {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.color-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.color-btn-red {
+  background: radial-gradient(circle at 30% 30%, #ffb3ae, var(--red));
+}
+
+.color-btn-yellow {
+  background: radial-gradient(circle at 30% 30%, #ffe7a6, var(--yellow));
+}
+
+.color-btn-green {
+  background: radial-gradient(circle at 30% 30%, #b9ffcc, var(--green));
+}
+
+.color-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.45);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.color-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.intersection-container {
+  display: flex;
+  flex-wrap: nowrap;            /* keep all three lanes on one row */
+  justify-content: space-between;
+  gap: 1.5rem;
+  background: rgba(0, 0, 0, 0.50); /* darker backdrop behind lights */
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.lane {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lane-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.traffic-pole {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.6rem;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+}
+
+.light {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  opacity: 0.25;
+  transition: opacity 0.25s ease, box-shadow 0.25s ease;
+}
+
+.light.red    { background: var(--red); }
+.light.yellow { background: var(--yellow); }
+.light.green  { background: var(--green); }
+
+/* Active state: full opacity + glow */
+.light.on {
+  opacity: 1;
+  box-shadow: 0 0 20px currentColor;
+}
+
+.light.red.on    { box-shadow: 0 0 18px var(--red); }
+.light.yellow.on { box-shadow: 0 0 18px var(--yellow); }
+.light.green.on  { box-shadow: 0 0 18px var(--green); }
+
+/* --- Transition button --- */
+.transition-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.pedestrian-btn {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.transition-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-1px);
+}
+
+.transition-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --- System Logs sidebar --- */
+.logs-sidebar h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+  color: var(--text-muted);
+}
+
+.log-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 280px;
+  overflow-y: auto;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.log-list li {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+}
+
+.log-list li:last-child {
+  border-bottom: none;
+}
+
+.log-list .log-time {
+  color: var(--text-muted);
+  margin-right: 0.5rem;
+}
+
+/* --- Tablet and up: sidebar beside simulation --- */
+@media (min-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 320px;
+    grid-template-rows: 1fr;
+    gap: 1.5rem;
+    min-height: 60vh;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .simulation {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .intersection-container {
+    flex: 1;
+  }
+
+  .light {
+    width: 44px;
+    height: 44px;
+  }
+
+  .log-list {
+    max-height: 400px;
+  }
+}
+
+/* --- Desktop: larger simulation --- */
+@media (min-width: 1024px) {
+  .dashboard {
+    padding: 1.5rem;
+  }
+
+  .intersection-container {
+    gap: 3rem;
+  }
+
+  .light {
+    width: 52px;
+    height: 52px;
+  }
+}
